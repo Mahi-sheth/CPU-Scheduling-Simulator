@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>SchedViz | Advanced Features</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 20% 30%, #0A0F1A, #03060C);
+            color: #EFF3FC;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #10141f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5A7CFF;
+            border-radius: 10px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            backdrop-filter: blur(12px);
+            background: rgba(5, 10, 20, 0.75);
+            border-bottom: 1px solid rgba(72, 120, 255, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #A0C0FF, #6C8CFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            cursor: pointer;
+        }
+        .logo i {
+            background: none;
+            color: #6C8CFF;
+            margin-right: 6px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #CFE3FF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            text-shadow: 0 0 6px #6C8CFF;
+        }
+
+        /* User profile section - same as simulator.html */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(92, 124, 255, 0.15);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            border: 1px solid rgba(92, 124, 255, 0.3);
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #5A7CFF, #3B5BDB);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+        }
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #CFE3FF;
+        }
+        .logout-btn {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid #FF6B6B;
+            padding: 0.25rem 0.7rem;
+            border-radius: 40px;
+            color: #FF6B6B;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: scale(0.95);
+        }
+
+        .advanced-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            background: rgba(12, 20, 32, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(92, 124, 255, 0.2);
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #A0C0FF;
+            border-bottom: 1px solid rgba(92, 124, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .mlfq-config {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .queue-config {
+            background: #0E1625;
+            border-radius: 0.8rem;
+            padding: 0.8rem;
+            border: 1px solid #2A3650;
+        }
+        .queue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .queue-level {
+            font-weight: 600;
+            color: #6C8CFF;
+        }
+        .queue-quantum {
+            font-size: 0.8rem;
+            color: #A7BBE0;
+        }
+        .queue-slider {
+            width: 100%;
+            height: 4px;
+            background: #2A3650;
+            border-radius: 5px;
+            appearance: none;
+        }
+        .queue-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #5A7CFF;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .queue-value {
+            font-size: 0.7rem;
+            color: #6C8CFF;
+            margin-top: 0.3rem;
+        }
+
+        .cpu-cores {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .core-card {
+            background: #0E1625;
+            border-radius: 0.8rem;
+            padding: 0.8rem;
+            border-left: 3px solid #5A7CFF;
+        }
+        .core-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .core-name {
+            font-weight: 600;
+            color: #6C8CFF;
+        }
+        .core-status {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            background: rgba(75, 181, 67, 0.2);
+            color: #6BFF9E;
+        }
+        .core-process {
+            font-size: 0.8rem;
+            color: #CFE3FF;
+        }
+        .core-load {
+            height: 4px;
+            background: #2A3650;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        .core-load-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #5A7CFF, #3B5BDB);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .process-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .control-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .control-input {
+            flex: 1;
+            background: #0E1625;
+            border: 1px solid #2A3650;
+            border-radius: 0.6rem;
+            padding: 0.7rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .dynamic-process-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 0.8rem;
+        }
+        .dynamic-process-item {
+            background: #0E1625;
+            border-radius: 0.6rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+        .btn-primary {
+            background: linear-gradient(95deg, #5C7CFF, #3F5FDF);
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 0.6rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+        }
+        .btn-secondary {
+            background: rgba(92, 124, 255, 0.15);
+            border: 1px solid #5A7CFF;
+            padding: 0.6rem 1rem;
+            border-radius: 0.6rem;
+            color: #A0C0FF;
+            cursor: pointer;
+        }
+        .btn-danger {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid #FF6B6B;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.4rem;
+            color: #FF6B6B;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .simulation-output {
+            background: rgba(12, 20, 32, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(92, 124, 255, 0.2);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .gantt-container {
+            background: #0A0F1A;
+            border-radius: 1rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+            min-height: 200px;
+        }
+        
+        .placeholder {
+            text-align: center;
+            color: #6A7DA0;
+            padding: 2rem;
+        }
+        
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .metric-badge {
+            background: #0E1625;
+            border-radius: 0.8rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #2A3650;
+            transition: 0.2s;
+        }
+        .metric-badge:hover {
+            border-color: #5A7CFF;
+        }
+        .metric-badge-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6C8CFF;
+        }
+        .metric-label {
+            font-size: 0.7rem;
+            color: #A7BBE0;
+            margin-top: 0.3rem;
+        }
+
+        .gantt-block {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .gantt-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .gantt-block:hover::before {
+            left: 100%;
+        }
+        .gantt-block:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 900px) {
+            .advanced-grid { grid-template-columns: 1fr; }
+            .metrics-row { grid-template-columns: repeat(2, 1fr); }
+            .navbar { padding: 1rem; flex-wrap: wrap; }
+            .nav-links { gap: 1rem; flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='index2.html'">
+            <i class="fas fa-microchip"></i> SchedViz
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a onclick="window.location.href='index2.html'">Home</a>
+            <a onclick="window.location.href='about2.html'">About Us</a>
+            <a href="simulator.html">Simulator</a>
+            <a href="comparison.html">Comparison</a>
+            <a href="advanced.html" class="active">Advanced</a>
+            <span id="authSection"></span>
+        </div>
+    </nav>
+
+    <div class="advanced-container">
+        <div class="advanced-grid">
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-layer-group"></i> MLFQ Configuration</h3>
+                <div class="mlfq-config">
+                    <div class="queue-config">
+                        <div class="queue-header">
+                            <span class="queue-level">Queue 1 (Highest Priority)</span>
+                            <span class="queue-quantum">Quantum: <span id="q1Value">2</span></span>
+                        </div>
+                        <input type="range" id="q1Slider" class="queue-slider" min="1" max="8" value="2">
+                        <div class="queue-value">Round Robin with higher priority (shorter quantum)</div>
+                    </div>
+                    <div class="queue-config">
+                        <div class="queue-header">
+                            <span class="queue-level">Queue 2</span>
+                            <span class="queue-quantum">Quantum: <span id="q2Value">4</span></span>
+                        </div>
+                        <input type="range" id="q2Slider" class="queue-slider" min="2" max="16" value="4">
+                        <div class="queue-value">Round Robin (medium quantum)</div>
+                    </div>
+                    <div class="queue-config">
+                        <div class="queue-header">
+                            <span class="queue-level">Queue 3 (Lowest Priority)</span>
+                            <span class="queue-quantum">Quantum: <span id="q3Value">8</span></span>
+                        </div>
+                        <input type="range" id="q3Slider" class="queue-slider" min="4" max="32" value="8">
+                        <div class="queue-value">FCFS with large quantum</div>
+                    </div>
+                </div>
+                <button class="btn-secondary" id="applyMLFQBtn" style="margin-top: 1rem; width: 100%;"><i class="fas fa-save"></i> Apply MLFQ Settings</button>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-microchip"></i> Multi-core Simulation</h3>
+                <div class="cpu-cores" id="cpuCores">
+                    <div class="core-card" data-core="0">
+                        <div class="core-header">
+                            <span class="core-name"><i class="fas fa-tachometer-alt"></i> CPU Core 1</span>
+                            <span class="core-status">Idle</span>
+                        </div>
+                        <div class="core-process">No process running</div>
+                        <div class="core-load"><div class="core-load-bar" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="core-card" data-core="1">
+                        <div class="core-header">
+                            <span class="core-name"><i class="fas fa-tachometer-alt"></i> CPU Core 2</span>
+                            <span class="core-status">Idle</span>
+                        </div>
+                        <div class="core-process">No process running</div>
+                        <div class="core-load"><div class="core-load-bar" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="core-card" data-core="2">
+                        <div class="core-header">
+                            <span class="core-name"><i class="fas fa-tachometer-alt"></i> CPU Core 3</span>
+                            <span class="core-status">Idle</span>
+                        </div>
+                        <div class="core-process">No process running</div>
+                        <div class="core-load"><div class="core-load-bar" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="core-card" data-core="3">
+                        <div class="core-header">
+                            <span class="core-name"><i class="fas fa-tachometer-alt"></i> CPU Core 4</span>
+                            <span class="core-status">Idle</span>
+                        </div>
+                        <div class="core-process">No process running</div>
+                        <div class="core-load"><div class="core-load-bar" style="width: 0%;"></div></div>
+                    </div>
+                </div>
+                <button class="btn-secondary" id="simulateMultiCoreBtn" style="margin-top: 1rem; width: 100%;"><i class="fas fa-play"></i> Simulate MLFQ</button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 class="card-title"><i class="fas fa-sliders-h"></i> Dynamic Process Controls</h3>
+            <div class="process-controls">
+                <div class="control-group">
+                    <input type="text" id="dynPid" class="control-input" placeholder="PID (e.g., P5)">
+                    <input type="number" id="dynArrival" class="control-input" placeholder="Arrival Time">
+                    <input type="number" id="dynBurst" class="control-input" placeholder="Burst Time">
+                    <input type="number" id="dynPriority" class="control-input" placeholder="Priority">
+                </div>
+                <div class="control-group">
+                    <button class="btn-primary" id="addDynamicProcess"><i class="fas fa-plus"></i> Add Process</button>
+                    <button class="btn-secondary" id="resetProcessesBtn"><i class="fas fa-sync-alt"></i> Reset</button>
+                </div>
+                <div id="dynamicProcessList" class="dynamic-process-list"></div>
+            </div>
+        </div>
+
+        <div class="simulation-output">
+            <h3 class="card-title" style="margin-bottom: 0.5rem;"><i class="fas fa-chart-line"></i> Simulation Results</h3>
+            <div class="gantt-container" id="ganttContainer">
+                <div class="placeholder"><i class="fas fa-chart-gantt"></i> Add processes and click "Simulate MLFQ"</div>
+            </div>
+            <div class="metrics-row" id="metricsRow">
+                <div class="metric-badge">
+                    <div class="metric-badge-value" id="avgTurnaround">—</div>
+                    <div class="metric-label">Avg Turnaround Time</div>
+                </div>
+                <div class="metric-badge">
+                    <div class="metric-badge-value" id="avgWaiting">—</div>
+                    <div class="metric-label">Avg Waiting Time</div>
+                </div>
+                <div class="metric-badge">
+                    <div class="metric-badge-value" id="cpuUtil">—</div>
+                    <div class="metric-label">CPU Utilization</div>
+                </div>
+                <div class="metric-badge">
+                    <div class="metric-badge-value" id="throughput">—</div>
+                    <div class="metric-label">Throughput</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mlfqConfig = { queue1Quantum: 2, queue2Quantum: 4, queue3Quantum: 8 };
+        let dynamicProcesses = [
+            { pid: 1, arrival: 0, burst: 5, priority: 2 },
+            { pid: 2, arrival: 1, burst: 3, priority: 1 },
+            { pid: 3, arrival: 2, burst: 8, priority: 3 },
+            { pid: 4, arrival: 3, burst: 6, priority: 2 }
+        ];
+
+        // Aesthetic gradient colors for each process
+        const processGradients = {
+            1: 'linear-gradient(135deg, #FF6B6B, #EE5A5A)',
+            2: 'linear-gradient(135deg, #4ECDC4, #3DBDB4)',
+            3: 'linear-gradient(135deg, #45B7D1, #35A7C1)',
+            4: 'linear-gradient(135deg, #96CEB4, #86BEA4)',
+            5: 'linear-gradient(135deg, #FFEAA7, #EFDA97)',
+            6: 'linear-gradient(135deg, #DDA0DD, #CD90CD)',
+            7: 'linear-gradient(135deg, #98D8C8, #88C8B8)',
+            8: 'linear-gradient(135deg, #F7B787, #E7A777)'
+        };
+
+        function getProcessGradient(pid) {
+            const pidNum = parseInt(pid.toString().replace('P', ''));
+            return processGradients[(pidNum - 1) % 8 + 1] || 'linear-gradient(135deg, #5A7CFF, #3B5BDB)';
+        }
+
+        function getUserData() {
+            const usersDB = localStorage.getItem('cpu_sim_users_db');
+            if (usersDB) {
+                const users = JSON.parse(usersDB);
+                const loggedInEmail = sessionStorage.getItem('loggedUserEmail');
+                if (loggedInEmail && users[loggedInEmail]) {
+                    return users[loggedInEmail];
+                }
+            }
+            return null;
+        }
+
+        function getUserFullName() {
+            const userData = getUserData();
+            if (userData) {
+                if (userData.firstName && userData.lastName) {
+                    return `${userData.firstName} ${userData.lastName}`;
+                }
+                if (userData.name) {
+                    return userData.name;
+                }
+            }
+            return sessionStorage.getItem('loggedUserName') || 'User';
+        }
+
+        function updateNavbarWithLogout() {
+            const loggedIn = sessionStorage.getItem('cpu_sim_loggedIn') === 'true';
+            const authSection = document.getElementById('authSection');
+            
+            if (loggedIn) {
+                const fullName = getUserFullName();
+                const firstName = fullName.split(' ')[0];
+                const initial = firstName.charAt(0).toUpperCase();
+                authSection.innerHTML = `
+                    <div class="user-profile">
+                        <div class="user-avatar">${initial}</div>
+                        <div class="user-name">${fullName}</div>
+                        <button class="logout-btn" onclick="logoutUser()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                `;
+            } else {
+                authSection.innerHTML = `<a href="login.html" style="color: #CFE3FF; text-decoration: none;">Login</a>`;
+            }
+        }
+
+        function logoutUser() {
+            sessionStorage.removeItem('cpu_sim_loggedIn');
+            sessionStorage.removeItem('loggedUserEmail');
+            sessionStorage.removeItem('loggedUserName');
+            sessionStorage.removeItem('tempLoginEmail');
+            sessionStorage.removeItem('tempUserData');
+            alert('✅ Logged out successfully!');
+            window.location.href = 'index.html';
+        }
+
+        function renderDynamicProcessList() {
+            const container = document.getElementById('dynamicProcessList');
+            if (dynamicProcesses.length === 0) {
+                container.innerHTML = '<div class="dynamic-process-item" style="color: #6A7DA0; text-align: center;">No processes added yet</div>';
+                return;
+            }
+            container.innerHTML = '';
+            dynamicProcesses.forEach((p, idx) => {
+                const gradient = getProcessGradient(p.pid);
+                const div = document.createElement('div');
+                div.className = 'dynamic-process-item';
+                div.style.borderLeft = `3px solid ${gradient.split(',')[1] || '#5A7CFF'}`;
+                div.innerHTML = `
+                    <span><strong style="background: ${gradient}; -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700;">P${p.pid}</strong> | AT:${p.arrival} | BT:${p.burst} | P:${p.priority}</span>
+                    <button class="btn-danger" data-idx="${idx}"><i class="fas fa-trash"></i></button>
+                `;
+                container.appendChild(div);
+            });
+            document.querySelectorAll('.btn-danger').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.dataset.idx);
+                    dynamicProcesses.splice(idx, 1);
+                    dynamicProcesses.forEach((p, i) => { p.pid = i + 1; });
+                    renderDynamicProcessList();
+                });
+            });
+        }
+
+        document.getElementById('addDynamicProcess').addEventListener('click', () => {
+            const arrival = parseInt(document.getElementById('dynArrival').value);
+            const burst = parseInt(document.getElementById('dynBurst').value);
+            const priority = parseInt(document.getElementById('dynPriority').value) || 1;
+            if (isNaN(arrival) || isNaN(burst)) {
+                alert('Please fill Arrival Time and Burst Time');
+                return;
+            }
+            const newPid = dynamicProcesses.length + 1;
+            dynamicProcesses.push({ pid: newPid, arrival, burst, priority });
+            renderDynamicProcessList();
+            document.getElementById('dynArrival').value = '';
+            document.getElementById('dynBurst').value = '';
+            document.getElementById('dynPriority').value = '';
+        });
+
+        document.getElementById('resetProcessesBtn').addEventListener('click', () => {
+            dynamicProcesses = [
+                { pid: 1, arrival: 0, burst: 5, priority: 2 },
+                { pid: 2, arrival: 1, burst: 3, priority: 1 },
+                { pid: 3, arrival: 2, burst: 8, priority: 3 },
+                { pid: 4, arrival: 3, burst: 6, priority: 2 }
+            ];
+            renderDynamicProcessList();
+        });
+
+        document.getElementById('q1Slider').addEventListener('input', (e) => {
+            document.getElementById('q1Value').innerText = e.target.value;
+            mlfqConfig.queue1Quantum = parseInt(e.target.value);
+        });
+        document.getElementById('q2Slider').addEventListener('input', (e) => {
+            document.getElementById('q2Value').innerText = e.target.value;
+            mlfqConfig.queue2Quantum = parseInt(e.target.value);
+        });
+        document.getElementById('q3Slider').addEventListener('input', (e) => {
+            document.getElementById('q3Value').innerText = e.target.value;
+            mlfqConfig.queue3Quantum = parseInt(e.target.value);
+        });
+
+        document.getElementById('applyMLFQBtn').addEventListener('click', () => {
+            alert(`MLFQ Configuration Applied!\n\nQueue 1 Quantum: ${mlfqConfig.queue1Quantum}\nQueue 2 Quantum: ${mlfqConfig.queue2Quantum}\nQueue 3 Quantum: ${mlfqConfig.queue3Quantum}`);
+        });
+
+        // ========== LOCAL MLFQ SIMULATION (NO BACKEND NEEDED) ==========
+        function runMLFQLocal(processes, q1Quantum, q2Quantum, q3Quantum) {
+            let processesCopy = processes.map(p => ({
+                ...p,
+                remaining: p.burst,
+                completion: 0,
+                waiting: 0,
+                turnaround: 0
+            }));
+            
+            processesCopy.sort((a, b) => a.arrival - b.arrival);
+            
+            let time = 0;
+            let completed = 0;
+            let idx = 0;
+            let gantt = [];
+            let queue1 = [];
+            let queue2 = [];
+            let queue3 = [];
+            let inQueue = new Set();
+            
+            while (completed < processesCopy.length) {
+                while (idx < processesCopy.length && processesCopy[idx].arrival <= time) {
+                    if (!inQueue.has(processesCopy[idx].pid)) {
+                        queue1.push(processesCopy[idx]);
+                        inQueue.add(processesCopy[idx].pid);
+                    }
+                    idx++;
+                }
+                
+                let current = null;
+                let currentQueue = null;
+                let quantum = 0;
+                
+                if (queue1.length > 0) {
+                    current = queue1.shift();
+                    currentQueue = 'q1';
+                    quantum = q1Quantum;
+                } else if (queue2.length > 0) {
+                    current = queue2.shift();
+                    currentQueue = 'q2';
+                    quantum = q2Quantum;
+                } else if (queue3.length > 0) {
+                    current = queue3.shift();
+                    currentQueue = 'q3';
+                    quantum = Infinity;
+                } else {
+                    if (idx < processesCopy.length) {
+                        time = processesCopy[idx].arrival;
+                    } else {
+                        break;
+                    }
+                    continue;
+                }
+                
+                let execTime = Math.min(quantum, current.remaining);
+                let start = time;
+                let end = time + execTime;
+                gantt.push({ pid: `P${current.pid}`, start, end });
+                time = end;
+                current.remaining -= execTime;
+                
+                while (idx < processesCopy.length && processesCopy[idx].arrival <= time) {
+                    if (!inQueue.has(processesCopy[idx].pid)) {
+                        queue1.push(processesCopy[idx]);
+                        inQueue.add(processesCopy[idx].pid);
+                    }
+                    idx++;
+                }
+                
+                if (current.remaining > 0) {
+                    if (currentQueue === 'q1') {
+                        queue2.push(current);
+                    } else if (currentQueue === 'q2') {
+                        queue3.push(current);
+                    } else {
+                        queue3.push(current);
+                    }
+                } else {
+                    current.completion = time;
+                    current.turnaround = current.completion - current.arrival;
+                    current.waiting = current.turnaround - current.burst;
+                    completed++;
+                    inQueue.delete(current.pid);
+                    
+                    const originalIndex = processesCopy.findIndex(p => p.pid === current.pid);
+                    if (originalIndex !== -1) {
+                        processesCopy[originalIndex] = current;
+                    }
+                }
+            }
+            
+            let totalWaiting = 0, totalTurnaround = 0;
+            processesCopy.forEach(p => {
+                totalWaiting += p.waiting;
+                totalTurnaround += p.turnaround;
+            });
+            
+            const maxTime = Math.max(...gantt.map(g => g.end), 1);
+            const totalBurst = processesCopy.reduce((sum, p) => sum + p.burst, 0);
+            const cpuUtil = (totalBurst / maxTime) * 100;
+            const throughput = processesCopy.length / maxTime;
+            
+            return {
+                gantt: gantt,
+                avgWaiting: totalWaiting / processesCopy.length,
+                avgTurnaround: totalTurnaround / processesCopy.length,
+                cpuUtil: cpuUtil,
+                throughput: throughput
+            };
+        }
+
+        function renderGanttChart(ganttData, maxTime, metrics) {
+            const container = document.getElementById('ganttContainer');
+            
+            if (!ganttData || ganttData.length === 0) {
+                container.innerHTML = '<div class="placeholder"><i class="fas fa-chart-gantt"></i> No data to display</div>';
+                return;
+            }
+            
+            const unitWidth = 60;
+            const chartWidth = maxTime * unitWidth;
+            
+            let html = `<div style="min-width: ${chartWidth}px;">`;
+            
+            html += `<div style="position: relative; width: ${chartWidth}px; height: 25px; margin-bottom: 10px;">`;
+            for (let i = 0; i <= maxTime; i++) {
+                html += `
+                    <div style="position: absolute; left: ${i * unitWidth}px; transform: translateX(-50%); font-size: 0.7rem; color: #8FA3D9;">
+                        ${i}
+                    </div>
+                    <div style="position: absolute; left: ${i * unitWidth}px; top: 18px; width: 1px; height: 8px; background: rgba(92,124,255,0.3);"></div>
+                `;
+            }
+            html += `</div>`;
+            
+            html += `<div style="position: relative; width: ${chartWidth}px; height: 55px; margin: 5px 0;">`;
+            for (let block of ganttData) {
+                const leftPos = block.start * unitWidth;
+                const blockWidth = (block.end - block.start) * unitWidth;
+                const gradient = getProcessGradient(block.pid);
+                html += `
+                    <div class="gantt-block" style="position: absolute; left: ${leftPos}px; width: ${blockWidth}px; height: 100%; background: ${gradient}; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"
+                        title="${block.pid}: ${block.start} → ${block.end}">
+                        ${block.pid}
+                    </div>
+                `;
+            }
+            html += `</div>`;
+            
+            html += `<div style="position: relative; width: ${chartWidth}px; height: 25px; margin-top: 5px;">`;
+            for (let block of ganttData) {
+                const centerPos = ((block.start + block.end) / 2) * unitWidth;
+                html += `
+                    <div style="position: absolute; left: ${centerPos}px; transform: translateX(-50%); font-size: 0.7rem; font-weight: 500; color: #A0C0FF;">
+                        ${block.pid}
+                    </div>
+                `;
+            }
+            html += `</div>`;
+            
+            html += `</div>`;
+            container.innerHTML = html;
+            
+            if (metrics) {
+                document.getElementById('avgWaiting').innerText = metrics.avgWaiting.toFixed(2);
+                document.getElementById('avgTurnaround').innerText = metrics.avgTurnaround.toFixed(2);
+                document.getElementById('cpuUtil').innerText = metrics.cpuUtil.toFixed(1) + '%';
+                document.getElementById('throughput').innerText = metrics.throughput.toFixed(4);
+            }
+        }
+
+        function updateCpuCores(ganttData, maxTime) {
+            const cores = document.querySelectorAll('.core-card');
+            
+            cores.forEach(core => {
+                const statusSpan = core.querySelector('.core-status');
+                const processSpan = core.querySelector('.core-process');
+                const loadBar = core.querySelector('.core-load-bar');
+                
+                statusSpan.innerText = 'Idle';
+                statusSpan.style.background = 'rgba(92, 124, 255, 0.15)';
+                statusSpan.style.color = '#A0C0FF';
+                processSpan.innerText = 'No process running';
+                loadBar.style.width = '0%';
+            });
+            
+            if (!ganttData || ganttData.length === 0) return;
+            
+            const coreProcesses = [[], [], [], []];
+            ganttData.forEach((block, idx) => {
+                const coreIdx = idx % 4;
+                coreProcesses[coreIdx].push(block);
+            });
+            
+            for (let i = 0; i < cores.length && i < coreProcesses.length; i++) {
+                const blocks = coreProcesses[i];
+                if (blocks.length > 0) {
+                    const lastBlock = blocks[blocks.length - 1];
+                    const totalTime = blocks.reduce((sum, b) => sum + (b.end - b.start), 0);
+                    const utilization = (totalTime / maxTime) * 100;
+                    
+                    const statusSpan = cores[i].querySelector('.core-status');
+                    const processSpan = cores[i].querySelector('.core-process');
+                    const loadBar = cores[i].querySelector('.core-load-bar');
+                    
+                    statusSpan.innerText = 'Active';
+                    statusSpan.style.background = 'rgba(75, 181, 67, 0.2)';
+                    statusSpan.style.color = '#6BFF9E';
+                    processSpan.innerText = `Running: ${blocks.length} processes | Last: ${lastBlock.pid} (${lastBlock.start}→${lastBlock.end})`;
+                    loadBar.style.width = `${Math.min(100, utilization)}%`;
+                }
+            }
+        }
+
+        function runMLFQSimulation() {
+            if (dynamicProcesses.length === 0) {
+                alert('Please add some processes first');
+                return;
+            }
+            
+            const result = runMLFQLocal(dynamicProcesses, mlfqConfig.queue1Quantum, mlfqConfig.queue2Quantum, mlfqConfig.queue3Quantum);
+            
+            const maxTime = Math.max(...result.gantt.map(g => g.end), 1);
+            renderGanttChart(result.gantt, maxTime, result);
+            updateCpuCores(result.gantt, maxTime);
+        }
+
+        document.getElementById('simulateMultiCoreBtn').addEventListener('click', runMLFQSimulation);
+        
+        renderDynamicProcessList();
+        updateNavbarWithLogout();
+    </script>
+</body>
+</html>

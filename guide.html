@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>SchedViz | User Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 20% 30%, #0A0F1A, #03060C);
+            color: #EFF3FC;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #10141f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5A7CFF;
+            border-radius: 10px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            backdrop-filter: blur(12px);
+            background: rgba(5, 10, 20, 0.75);
+            border-bottom: 1px solid rgba(72, 120, 255, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #A0C0FF, #6C8CFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            cursor: pointer;
+        }
+        .logo i {
+            background: none;
+            color: #6C8CFF;
+            margin-right: 6px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #CFE3FF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        .nav-links a:hover {
+            color: white;
+            text-shadow: 0 0 6px #6C8CFF;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(92, 124, 255, 0.15);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            border: 1px solid rgba(92, 124, 255, 0.3);
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #5A7CFF, #3B5BDB);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+        }
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #CFE3FF;
+        }
+        .logout-btn {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid #FF6B6B;
+            padding: 0.25rem 0.7rem;
+            border-radius: 40px;
+            color: #FF6B6B;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: scale(0.95);
+        }
+
+        .guide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        
+        .guide-hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .robot-character {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: bounce 2s ease-in-out infinite;
+            display: inline-block;
+            color: #FFFFFF;
+            text-shadow: none;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+        }
+        
+        .robot-character:hover {
+            transform: scale(1.1);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .guide-hero h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #FFFFFF, #A0C0FF, #6C8CFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        .guide-hero p {
+            color: #B8CCF0;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Feature Cards Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .guide-card {
+            background: rgba(12, 20, 32, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(92, 124, 255, 0.2);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease both;
+        }
+        .guide-card:nth-child(1) { animation-delay: 0.1s; }
+        .guide-card:nth-child(2) { animation-delay: 0.2s; }
+        .guide-card:nth-child(3) { animation-delay: 0.3s; }
+        .guide-card:nth-child(4) { animation-delay: 0.4s; }
+        .guide-card:nth-child(5) { animation-delay: 0.5s; }
+        .guide-card:nth-child(6) { animation-delay: 0.6s; }
+        .guide-card:hover {
+            transform: translateY(-5px);
+            border-color: #5A7CFF;
+        }
+        .card-icon {
+            font-size: 2.5rem;
+            color: #6C8CFF;
+            margin-bottom: 1rem;
+        }
+        .guide-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #A0C0FF;
+        }
+        .guide-card p {
+            color: #B2C4E8;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        .guide-card .step-number {
+            display: inline-block;
+            background: rgba(92, 124, 255, 0.2);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-bottom: 0.8rem;
+            color: #6C8CFF;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: rgba(10, 18, 30, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(92, 124, 255, 0.2);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease 0.7s both;
+        }
+        .tips-section h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #A0C0FF;
+        }
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .tip-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            background: rgba(14, 22, 37, 0.5);
+            border-radius: 1rem;
+        }
+        .tip-icon {
+            font-size: 1.5rem;
+            color: #FFD966;
+        }
+        .tip-text {
+            font-size: 0.85rem;
+            color: #CFE3FF;
+        }
+
+        /* Quick Links - Only Go to Simulator */
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            animation: fadeInUp 0.6s ease 0.8s both;
+        }
+        .quick-btn {
+            background: linear-gradient(95deg, #5C7CFF, #3F5FDF);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 91, 219, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(21, 32, 50, 0.6);
+            margin-top: 2rem;
+            color: #6A7DA0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .navbar { padding: 1rem; flex-wrap: wrap; gap: 10px; }
+            .nav-links { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+            .guide-hero h1 { font-size: 1.8rem; }
+            .guide-container { padding: 1rem; }
+            .robot-character { font-size: 70px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'">
+        <i class="fas fa-microchip"></i> SchedViz
+    </div>
+    <div class="nav-links">
+        <a onclick="window.location.href='index.html'">Home</a>
+        <a onclick="window.location.href='about2.html'">About Us</a>
+        <a href="login.html">Login</a>
+        <a href="signup.html">Sign Up</a>
+        <span id="authSection"></span>
+    </div>
+</nav>
+
+<div class="guide-container">
+    <div class="guide-hero">
+        <div class="robot-character" id="robotChar">
+            🤖
+        </div>
+        <h1>🎮 How to Use SchedViz</h1>
+        <p>Your friendly guide to mastering CPU scheduling algorithms! Let's get started on this fun learning journey.</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="guide-card">
+            <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+            <div class="step-number">STEP 1</div>
+            <h3>Create Your Account</h3>
+            <p>Click on <strong>Sign Up</strong> and create your free account using your Gmail address. Already have an account? Just <strong>Login</strong>!</p>
+        </div>
+
+        <div class="guide-card">
+            <div class="card-icon"><i class="fas fa-microchip"></i></div>
+            <div class="step-number">STEP 2</div>
+            <h3>Configure Processes</h3>
+            <p>Add processes with their <strong>PID, Arrival Time, Burst Time, and Priority</strong>. You can also use the <strong>Random Generate</strong> button for quick testing!</p>
+        </div>
+
+        <div class="guide-card">
+            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="step-number">STEP 3</div>
+            <h3>Choose Algorithm</h3>
+            <p>Pick from <strong>6+ algorithms</strong>: FCFS, SJF, SRTF, Round Robin, Priority, or MLFQ. Each one behaves differently!</p>
+        </div>
+
+        <div class="guide-card">
+            <div class="card-icon"><i class="fas fa-chart-gantt"></i></div>
+            <div class="step-number">STEP 4</div>
+            <h3>Watch the Gantt Chart</h3>
+            <p>See your processes come to life! The <strong>Gantt Chart</strong> shows exactly when each process runs on the CPU.</p>
+        </div>
+
+        <div class="guide-card">
+            <div class="card-icon"><i class="fas fa-chart-simple"></i></div>
+            <div class="step-number">STEP 5</div>
+            <h3>Analyze Metrics</h3>
+            <p>Check <strong>Average Waiting Time, Turnaround Time, CPU Utilization, and Throughput</strong> to compare algorithm performance.</p>
+        </div>
+
+        <div class="guide-card">
+            <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
+            <div class="step-number">STEP 6</div>
+            <h3>Compare Algorithms</h3>
+            <p>Visit the <strong>Comparison</strong> page to see bar charts and pie charts comparing all algorithms side-by-side!</p>
+        </div>
+    </div>
+
+    <div class="tips-section">
+        <h2><i class="fas fa-lightbulb"></i> Pro Tips & Tricks</h2>
+        <div class="tips-grid">
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-dice"></i></div>
+                <div class="tip-text">🎲 Use <strong>Random Generate</strong> to quickly create test processes!</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-mouse-pointer"></i></div>
+                <div class="tip-text">🖱️ <strong>Hover over</strong> Gantt chart blocks to see detailed timing info!</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="tip-text">🥧 The <strong>pie chart</strong> shows percentage distribution of turnaround times!</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-microchip"></i></div>
+                <div class="tip-text">💻 <strong>Multi-core simulation</strong> shows how processes distribute across CPU cores!</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-sliders-h"></i></div>
+                <div class="tip-text">⚙️ <strong>MLFQ quantums</strong> can be adjusted in the Advanced page!</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-sync-alt"></i></div>
+                <div class="tip-text">🔄 <strong>Reset button</strong> brings back the default 4 processes!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quick-links">
+        <button class="quick-btn" id="goToSimulatorBtn">
+            <i class="fas fa-play"></i> Go to Simulator
+        </button>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem; padding: 1rem;">
+        <p style="color: #6A7DA0;">
+            <i class="fas fa-question-circle"></i> Need help? Check out the <strong>About Us</strong> page or contact the team!
+        </p>
+    </div>
+</div>
+
+<footer>
+    <p>© 2025 SchedViz — Smart CPU Scheduling Analyzer</p>
+</footer>
+
+<script>
+    // Robot bounce effect on hover
+    const robotElement = document.getElementById('robotChar');
+    robotElement.addEventListener('mouseenter', () => {
+        robotElement.style.transform = 'scale(1.15)';
+        setTimeout(() => {
+            robotElement.style.transform = 'scale(1)';
+        }, 200);
+    });
+
+    function getUserData() {
+        const usersDB = localStorage.getItem('cpu_sim_users_db');
+        if (usersDB) {
+            const users = JSON.parse(usersDB);
+            const loggedInEmail = sessionStorage.getItem('loggedUserEmail');
+            if (loggedInEmail && users[loggedInEmail]) {
+                return users[loggedInEmail];
+            }
+        }
+        return null;
+    }
+
+    function getUserFullName() {
+        const userData = getUserData();
+        if (userData) {
+            if (userData.firstName && userData.lastName) {
+                return `${userData.firstName} ${userData.lastName}`;
+            }
+            if (userData.name) {
+                return userData.name;
+            }
+        }
+        return sessionStorage.getItem('loggedUserName') || 'User';
+    }
+
+    function updateNavbarWithLogout() {
+        const loggedIn = sessionStorage.getItem('cpu_sim_loggedIn') === 'true';
+        const authSection = document.getElementById('authSection');
+        
+        if (loggedIn) {
+            const fullName = getUserFullName();
+            const firstName = fullName.split(' ')[0];
+            const initial = firstName.charAt(0).toUpperCase();
+            authSection.innerHTML = `
+                <div class="user-profile">
+                    <div class="user-avatar">${initial}</div>
+                    <div class="user-name">${firstName}</div>
+                    <button class="logout-btn" onclick="logoutUser()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            `;
+        } else {
+            authSection.innerHTML = ``;
+        }
+    }
+
+    function logoutUser() {
+        sessionStorage.removeItem('cpu_sim_loggedIn');
+        sessionStorage.removeItem('loggedUserEmail');
+        sessionStorage.removeItem('loggedUserName');
+        sessionStorage.removeItem('tempLoginEmail');
+        sessionStorage.removeItem('tempUserData');
+        alert('✅ Logged out successfully!');
+        window.location.href = 'index.html';
+    }
+
+    // Go to Simulator button - redirects to login page
+    document.getElementById('goToSimulatorBtn').addEventListener('click', () => {
+        window.location.href = 'login.html';
+    });
+
+    updateNavbarWithLogout();
+</script>
+</body>
+</html>
