@@ -109,19 +109,7 @@
             font-weight: 500;
             color: #CFE3FF;
         }
-        .logout-btn {
-            background: rgba(255, 107, 107, 0.15);
-            border: 1px solid #FF6B6B;
-            padding: 0.2rem 0.6rem;
-            border-radius: 40px;
-            color: #FF6B6B;
-            cursor: pointer;
-            font-size: 0.7rem;
-            transition: 0.2s;
-        }
-        .logout-btn:hover {
-            background: rgba(255, 107, 107, 0.3);
-        }
+        
 
         /* Main Content */
         .about-container {
@@ -524,54 +512,7 @@
         return null;
     }
 
-    // Get user's full name
-    function getUserFullName() {
-        const userData = getUserData();
-        if (userData) {
-            if (userData.firstName && userData.lastName) {
-                return `${userData.firstName} ${userData.lastName}`;
-            }
-            if (userData.name) {
-                return userData.name;
-            }
-        }
-        return sessionStorage.getItem('loggedUserName') || 'User';
-    }
-
-    // Update navbar based on login status
-    function updateNavbar() {
-        const loggedIn = sessionStorage.getItem('cpu_sim_loggedIn') === 'true';
-        const authSection = document.getElementById('authSection');
-        
-        if (loggedIn) {
-            const fullName = getUserFullName();
-            const firstName = fullName.split(' ')[0];
-            const initial = firstName.charAt(0).toUpperCase();
-            
-            authSection.innerHTML = `
-                <div class="user-profile">
-                    <div class="user-avatar">${initial}</div>
-                    <div class="user-name">${firstName}</div>
-                    <button class="logout-btn" onclick="logoutUser()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            `;
-        } else {
-            authSection.innerHTML = ``;
-        }
-    }
-
-    // Logout function
-    function logoutUser() {
-        sessionStorage.removeItem('cpu_sim_loggedIn');
-        sessionStorage.removeItem('loggedUserEmail');
-        sessionStorage.removeItem('loggedUserName');
-        sessionStorage.removeItem('tempLoginEmail');
-        sessionStorage.removeItem('tempUserData');
-        alert('✅ Logged out successfully!');
-        window.location.href = 'index.html';
-    }
+  
 
     // Animate stats numbers on load
     function animateNumbers() {
