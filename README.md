@@ -96,7 +96,6 @@ https://github.com/Mahi-sheth/CPU-Scheduling-Simulator
 https://drive.google.com/file/d/1QfJ-SuG7VDeICSN5XlFk1DAHwB7Ebax6/view?usp=sharing
 </a>
 <br><br>
-Ensure that the video access is set to "Anyone with the link can view".
 </p>
 
 <hr>
