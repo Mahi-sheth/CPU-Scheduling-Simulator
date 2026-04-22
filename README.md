@@ -86,7 +86,6 @@ This project develops an <b>interactive CPU Scheduling Simulator</b> that demons
 <p>
 👉 <a href="https://drive.google.com/file/d/1QfJ-SuG7VDeICSN5XlFk1DAHwB7Ebax6/view?usp=sharing">Watch Demo</a>
 <br><br>
-<i>(Make sure access is set to “Anyone with the link can view”)</i>
 </p>
 
 <hr>
