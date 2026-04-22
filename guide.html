@@ -79,54 +79,12 @@
             text-shadow: 0 0 6px #6C8CFF;
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            background: rgba(92, 124, 255, 0.15);
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            border: 1px solid rgba(92, 124, 255, 0.3);
-        }
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #5A7CFF, #3B5BDB);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: white;
-        }
-        .user-name {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #CFE3FF;
-        }
-        .logout-btn {
-            background: rgba(255, 107, 107, 0.15);
-            border: 1px solid #FF6B6B;
-            padding: 0.25rem 0.7rem;
-            border-radius: 40px;
-            color: #FF6B6B;
-            cursor: pointer;
-            font-size: 0.7rem;
-            transition: 0.2s;
-        }
-        .logout-btn:hover {
-            background: rgba(255, 107, 107, 0.3);
-            transform: scale(0.95);
-        }
-
         .guide-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        
         .guide-hero {
             text-align: center;
             margin-bottom: 3rem;
@@ -335,7 +293,6 @@
         <a onclick="window.location.href='about2.html'">About Us</a>
         <a href="login.html">Login</a>
         <a href="signup.html">Sign Up</a>
-        <span id="authSection"></span>
     </div>
 </nav>
 
@@ -449,69 +406,10 @@
         }, 200);
     });
 
-    function getUserData() {
-        const usersDB = localStorage.getItem('cpu_sim_users_db');
-        if (usersDB) {
-            const users = JSON.parse(usersDB);
-            const loggedInEmail = sessionStorage.getItem('loggedUserEmail');
-            if (loggedInEmail && users[loggedInEmail]) {
-                return users[loggedInEmail];
-            }
-        }
-        return null;
-    }
-
-    function getUserFullName() {
-        const userData = getUserData();
-        if (userData) {
-            if (userData.firstName && userData.lastName) {
-                return `${userData.firstName} ${userData.lastName}`;
-            }
-            if (userData.name) {
-                return userData.name;
-            }
-        }
-        return sessionStorage.getItem('loggedUserName') || 'User';
-    }
-
-    function updateNavbarWithLogout() {
-        const loggedIn = sessionStorage.getItem('cpu_sim_loggedIn') === 'true';
-        const authSection = document.getElementById('authSection');
-        
-        if (loggedIn) {
-            const fullName = getUserFullName();
-            const firstName = fullName.split(' ')[0];
-            const initial = firstName.charAt(0).toUpperCase();
-            authSection.innerHTML = `
-                <div class="user-profile">
-                    <div class="user-avatar">${initial}</div>
-                    <div class="user-name">${firstName}</div>
-                    <button class="logout-btn" onclick="logoutUser()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            `;
-        } else {
-            authSection.innerHTML = ``;
-        }
-    }
-
-    function logoutUser() {
-        sessionStorage.removeItem('cpu_sim_loggedIn');
-        sessionStorage.removeItem('loggedUserEmail');
-        sessionStorage.removeItem('loggedUserName');
-        sessionStorage.removeItem('tempLoginEmail');
-        sessionStorage.removeItem('tempUserData');
-        alert('✅ Logged out successfully!');
-        window.location.href = 'index.html';
-    }
-
     // Go to Simulator button - redirects to login page
     document.getElementById('goToSimulatorBtn').addEventListener('click', () => {
         window.location.href = 'login.html';
     });
-
-    updateNavbarWithLogout();
 </script>
 </body>
 </html>
